@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System ERP do harmonogramowania — Case Study</title>
+  <style>
+    :root {
+      --primary: #1f3864;
+      --accent: #2e75b6;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin: 48px 0 16px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #dbeafe;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin: 28px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    ul {
+      margin: 12px 0 16px 22px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .highlight {
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .role-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 20px 22px;
+      margin: 20px 0;
+    }
+
+    .screenshot {
+      margin: 28px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .screenshot img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: opacity 0.15s;
+    }
+
+    .screenshot img:hover {
+      opacity: 0.92;
+    }
+
+    .screenshot-caption {
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== CHIPS ===== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .chip {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.92rem;
+      padding: 7px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      cursor: default;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 2.2rem;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>System ERP do harmonogramowania dla centrum edukacyjnego</h1>
+      <div class="role-tag" style="display:inline-block;background:#eff6ff;color:#1f3864;
+        font-size:0.85rem;padding:4px 12px;border-radius:999px;margin-bottom:10px;">
+        Product &amp; Systems Architect — Oleksandr Shevchuk (Cyberdayag)
+      </div>
+      <div class="meta">
+        <strong>Streszczenie:</strong> zastąpienie przestarzałego systemu opartego na Excelu nowoczesną aplikacją webową.<br>
+        <strong>Rozwój:</strong> luty — połowa sierpnia 2026.<br>
+        <strong>Produkcja:</strong> od połowy sierpnia 2026.<br>
+        <strong>Status:</strong> system działa stabilnie na produkcji, bez awarii, trwają prace nad
+        nowymi funkcjami i dodatkowymi modułami.
+      </div>
+    </header>
+
+    <h2>Kontekst i problem</h2>
+    <p>
+      Po rozpoczęciu pracy w naukowo-edukacyjnym centrum fizyki i chemii odkryłem,
+      że organizacja korzysta z ciężkiego systemu zbudowanego na bazie Excela.
+      System stale się zawieszał, nie radził sobie pod obciążeniem, a codzienne zmiany operacyjne
+      były wyjątkowo uciążliwe i podatne na błędy.
+    </p>
+
+    <strong>Skala obciążenia operacyjnego:</strong>
+    <div class="chips">
+      <span class="chip">26 szkół partnerskich</span>
+      <span class="chip">do 50 lekcji dziennie</span>
+      <span class="chip">105 grup uczniowskich</span>
+      <span class="chip">specjalistyczne laboratoria</span>
+      <span class="chip">częste zastępstwa nauczycieli, odwołania i przełożenia lekcji</span>
+      <span class="chip">zamówienia sprzętu</span>
+    </div>
+
+    <p>
+      Doświadczenie w pracy z systemami transakcyjnymi ukształtowało prostą zasadę: każda zmiana
+      w harmonogramie czy zasobach powinna być obsługiwana równie rygorystycznie jak operacja bankowa.
+      Dlatego zaprojektowałem system gwarantujący spójność danych na poziomie bazy danych, niezmienny
+      Audit Log oraz możliwość bezpiecznego cofnięcia (rollback) dowolnego dnia.
+    </p>
+
+    <h2>Moja rola</h2>
+    <div class="role-box">
+      <p>
+        Po dogłębnym poznaniu procesów biznesowych centrum samodzielnie zaprojektowałem architekturę systemu: model
+        danych, kluczowe niezmienniki biznesowe, model dostępu oparty na rolach oraz mechanizmy rozwiązywania konfliktów.
+        Zaprojektowałem także schemat wdrożenia (AWS EC2 + Cloudflare Tunnel) oraz proces tworzenia kopii zapasowych
+        (AWS S3) z przetestowanym odzyskiwaniem po całkowitej awarii.
+      </p>
+      <p>
+        Z AI pracowałem jak tech lead z zespołem programistów: definiowałem zadania, wyznaczałem rozwiązanie
+        dla każdego z nich i krok po kroku weryfikowałem kod, zanim trafił do systemu.
+      </p>
+    </div>
+
+    <h2>Przegląd systemu</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">27</div>
+        <div class="stat-label">tabel w schemacie bazy danych</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">38</div>
+        <div class="stat-label">funkcji PL/pgSQL — logika biznesowa w bazie danych</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">495</div>
+        <div class="stat-label">commitów w ciągu 6 miesięcy rozwoju</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">w rzeczywistej eksploatacji</div>
+      </div>
+    </div>
+
+    <p>Pełnoprawna platforma ERP do zarządzania harmonogramem i działalnością operacyjną:</p>
+    <ul>
+      <li>Szablon roczny + generowany na jego podstawie harmonogram roczny</li>
+      <li>Edycja harmonogramu na poziomie dnia z freeze / unfreeze / rollback</li>
+      <li>Zastępstwa nauczycieli</li>
+      <li>Odwoływanie i przekładanie lekcji</li>
+      <li>Tworzenie nowych lekcji i zajęć dodatkowych</li>
+      <li>Proces zamawiania sprzętu laboratoryjnego</li>
+      <li>Kolejka zgłoszeń (zasada „jednego okienka")</li>
+      <li>Granularny dostęp oparty na rolach</li>
+      <li>Korytarzowe telebimy dla nauczycieli i uczniów</li>
+      <li>W pełni niezmienny audit log</li>
+    </ul>
+
+    <p><strong>Stos technologiczny:</strong></p>
+    <div class="chips">
+      <span class="chip">PostgreSQL 16</span>
+      <span class="chip">PL/pgSQL</span>
+      <span class="chip">Node.js + Express</span>
+      <span class="chip">Vue 3 + PrimeVue (RTL)</span>
+      <span class="chip">Docker · AWS · Cloudflare Tunnel</span>
+    </div>
+
+    <ul>
+      <li><strong>PostgreSQL</strong> — wybrany ze względu na natywne wsparcie dla EXCLUDE USING GIST. Pozwala to
+        na poziomie silnika bazy danych zagwarantować brak nakładania się przedziałów czasowych
+        i automatycznie wyeliminować race conditions przy równoległych zapytaniach.</li>
+      <li><strong>Logika w bazie danych</strong> — przeniesienie niezmienników do bazy danych zapewniło jedno źródło prawdy
+        i spójność danych niezależnie od punktu połączenia (API, skrypty w tle czy bezpośrednie sesje administracyjne).</li>
+      <li><strong>Node.js + Express</strong> — cienka, bezstanowa bramka (Thin API Gateway),
+        ograniczona do autoryzacji i przekazywania zapytań, bez duplikowania logiki biznesowej.</li>
+      <li><strong>Vue 3 + PrimeVue</strong> — skrócił time-to-market dzięki gotowemu ekosystemowi
+        złożonych komponentów UI dla ekranów administracyjnych.</li>
+      <li><strong>Cloudflare Tunnel</strong> — odizolował infrastrukturę zgodnie z zasadą Zero Trust,
+        eliminując potrzebę publikowania publicznego adresu IP i otwierania portów przychodzących.</li>
+    </ul>
+
+    <p><strong>Struktura projektu:</strong></p>
+    <div class="screenshot">
+      <img src="img/project-structure.png" alt="Struktura projektu" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Struktura repozytorium</strong> — system od początku zaprojektowany z wyraźnym podziałem
+        aplikacji, logiki bazy danych i infrastruktury.
+      </div>
+    </div>
+
+
+    <p><strong>System w praktyce:</strong></p>
+    <div class="screenshot">
+      <img src="img/t_corridor-display.jpg" alt="Telebim korytarzowy w pokoju nauczycielskim w budynku centrum"
+        onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Telebim korytarzowy w pokoju nauczycielskim</strong> — na żywo, na ścianie centrum edukacyjnego.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/s_corridor-display.jpg" alt="Telebim korytarzowy dla uczniów" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Telebim korytarzowy dla uczniów</strong> — na żywo, na ścianie centrum edukacyjnego.
+      </div>
+    </div>
+
+
+    <h2>Interfejs systemu</h2>
+    <p style="color:var(--muted); font-size:0.95rem; margin-bottom:8px;">
+      Kliknij dowolny zrzut ekranu, aby otworzyć go w pełnym rozmiarze.
+    </p>
+
+    <div class="screenshot">
+      <img src="img/daily-gantt.png" alt="Dzienny wykres Gantta" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Dzienny wykres Gantta</strong> — aktualny harmonogram dnia w podziale na sale.
+        Kolorowe oznaczenia przedmiotów, podświetlenie zastępstw, wskaźnik bieżącego czasu.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/basic-schedule-template.png" alt="Szablon podstawowy" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Szablon roczny (Basic Schedule)</strong> — źródło prawdy.
+        Zmiany z niego są bezpiecznie propagowane do wygenerowanego harmonogramu rocznego
+        za pomocą dwufazowego algorytmu.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/teacher-dashboard.png" alt="Panel nauczyciela" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Panel nauczyciela</strong> — osobisty pulpit: najbliższe lekcje, zgłoszenia sprzętu,
+        historia zastępstw i grafik pracy.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/admin-dashboard.png" alt="Panel administratora" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Panel administratora</strong> — centralne „jedno okienko". Nauczyciele wyłącznie tworzą zgłoszenia,
+        administratorzy je rozpatrują, korygują i wprowadzają zmiany.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/lab-assistant-dashboard.png" alt="Panel laborantów" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Panel laborantów</strong> — operacyjny widok: zamówienia sprzętu
+        i notatki na wybrany dzień.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/audit-log.png" alt="Audit Log" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Audit Log</strong> — w pełni niezmienna historia wszystkich istotnych działań.
+        Nawet superadministrator nie może zmienić ani usunąć wpisów.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/student-dashboard.png" alt="Tablica dla uczniów" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Tablica dla uczniów</strong> — publiczny ekran z bieżącym harmonogramem.
+      </div>
+    </div>
+
+    <h2>Kultura inżynierska — kod i dokumentacja</h2>
+    <p>
+      Jedna z kluczowych zasad projektu: logika i decyzje są wyjaśnione bezpośrednio w kodzie —
+      nie tylko <em>co</em> robi dana funkcja, ale też <em>dlaczego</em> jest potrzebna i co się zepsuje,
+      jeśli naruszy się dany niezmiennik.
+    </p>
+
+    <h3>1. Wyraźny podział struktury i logiki biznesowej</h3>
+    <div class="screenshot">
+      <img src="img/code-schema-sql.png" alt="Komentarze w schema.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>schema.sql</strong> — jasna zasada: tu znajduje się wyłącznie struktura.
+        Logika biznesowa mieszka w plikach modułowych.
+      </div>
+    </div>
+
+    <h3>2. Dobór sal z jawnie zapisanymi regułami biznesowymi</h3>
+    <div class="screenshot">
+      <img src="img/code-find-room.png" alt="Funkcja _find_room" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>campus._find_room()</strong> — reguły priorytetów sal dla fizyki i chemii
+        są udokumentowane i zakodowane wprost w zapytaniu.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/code-year-schedule.png" alt="Nagłówek year_schedule.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>year_schedule.sql</strong> — w nagłówku pliku wyjaśniono przeznaczenie każdej
+        kluczowej funkcji oraz przepływ freeze / unfreeze dnia.
+      </div>
+    </div>
+
+    <h2>Rezultaty</h2>
+    <ul>
+      <li>System działa produkcyjnie i stabilnie od sierpnia 2026</li>
+      <li>Wytrzymuje rzeczywiste, codzienne obciążenie operacyjne centrum</li>
+      <li>Krytyczne niezmienniki (konflikty harmonogramu, uprawnienia dostępu, audyt) są zagwarantowane na poziomie bazy danych</li>
+      <li>Pełna, niezmienna historia wszystkich istotnych działań</li>
+      <li>Z systemu codziennie korzysta ok. 50 pracowników</li>
+    </ul>
+
+    <footer>
+      <a href="https://www.linkedin.com/in/oleksandr-shevchuk-tech/" target="_blank" rel="noopener"
+        style="color:var(--accent); text-decoration:none;">LinkedIn</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
+      <br><br>
+      Case study przygotowane do portfolio. Szczegóły biznesowe zanonimizowano tam, gdzie było to konieczne.
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightbox-img" src="" alt="Powiększony zrzut ekranu">
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+
+</html>
