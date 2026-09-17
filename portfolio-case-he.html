@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מערכת ERP לניהול לוח זמנים — מקרה בוחן</title>
+  <style>
+    :root {
+      --primary: #1f3864;
+      --accent: #2e75b6;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin: 48px 0 16px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #dbeafe;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin: 28px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    ul {
+      margin: 12px 22px 16px 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .highlight {
+      background: #eff6ff;
+      border-right: 4px solid var(--accent);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .role-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 20px 22px;
+      margin: 20px 0;
+    }
+
+    .screenshot {
+      margin: 28px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .screenshot img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: opacity 0.15s;
+    }
+
+    .screenshot img:hover {
+      opacity: 0.92;
+    }
+
+    .screenshot-caption {
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== CHIPS ===== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .chip {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.92rem;
+      padding: 7px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      cursor: default;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 2.2rem;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>מערכת ERP לניהול לוח זמנים למרכז חינוכי</h1>
+      <div class="role-tag" style="display:inline-block;background:#eff6ff;color:#1f3864;
+        font-size:0.85rem;padding:4px 12px;border-radius:999px;margin-bottom:10px;">
+        Product &amp; Systems Architect — Oleksandr Shevchuk (Cyberdayag)
+      </div>
+      <div class="meta">
+        <strong>תקציר:</strong> החלפת מערכת מיושנת המבוססת על Excel באפליקציית ווב מודרנית.<br>
+        <strong>פיתוח:</strong> פברואר — אמצע אוגוסט 2026.<br>
+        <strong>בפרודקשן:</strong> החל מאמצע אוגוסט 2026.<br>
+        <strong>סטטוס:</strong> המערכת יציבה בפרודקשן ופועלת ללא תקלות; פיתוח פיצ'רים ומודולים
+        נוספים נמשך.
+      </div>
+    </header>
+
+    <h2>הקשר והבעיה</h2>
+    <p>
+      לאחר שהתחלתי לעבוד מול מרכז מדעי לפיזיקה וכימיה, גיליתי שהארגון עובד על מערכת ישנה המבוססת
+      על Excel. המערכת קרסה כל הזמן, נתקעה תחת עומס, וגרמה לכך ששינויים תפעוליים יומיומיים היו
+      כואבים ומועדים לטעויות.
+    </p>
+
+    <strong>היקף הפעילות:</strong>
+    <div class="chips">
+      <span class="chip">26 בתי ספר שותפים</span>
+      <span class="chip">עד 50 שיעורים ביום</span>
+      <span class="chip">105 קבוצות לימוד</span>
+      <span class="chip">מעבדות ייעודיות</span>
+      <span class="chip">חילופי מורים תכופים, ביטולים ודחיות שיעורים</span>
+      <span class="chip">הזמנות ציוד</span>
+    </div>
+
+    <p>
+      הניסיון שלי עם מערכות טרנזקציוניות גיבש עיקרון פשוט: כל שינוי בלוח הזמנים או במשאבים צריך
+      להיות מטופל באותה רמת קפדנות כמו פעולה בנקאית. לכן תכננתי מערכת המבטיחה שלמות נתונים ברמת
+      בסיס הנתונים, Audit Log בלתי ניתן לשינוי, ואפשרות לביטול בטוח (rollback) של כל יום.
+    </p>
+
+    <h2>התפקיד שלי</h2>
+    <div class="role-box">
+      <p>
+        לאחר לימוד תהליכי העבודה של המרכז, תכננתי באופן עצמאי את ארכיטקטורת המערכת: מודל הנתונים,
+        האינווריאנטים העסקיים המרכזיים, מודל ההרשאות לפי תפקיד, ומנגנוני פתרון הקונפליקטים. כמו כן
+        תכננתי את סכמת הפריסה (AWS EC2 + Cloudflare Tunnel) ואת תהליך הגיבוי (AWS S3), שנבדק
+        במלואו בתרחיש שחזור לאחר קריסה מוחלטת.
+      </p>
+      <p>
+        עבדתי עם AI כפי שטכ-ליד עובד עם צוות פיתוח: קבעתי משימות, החלטתי על הפתרון לכל אחת מהן,
+        ובדקתי את הקוד שלב אחר שלב לפני קבלתו למערכת.
+      </p>
+    </div>
+
+    <h2>סקירת המערכת</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">27</div>
+        <div class="stat-label">טבלאות בסכמת בסיס הנתונים</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">38</div>
+        <div class="stat-label">פונקציות PL/pgSQL — לוגיקה עסקית בבסיס הנתונים</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">495</div>
+        <div class="stat-label">קומיטים לאורך 6 חודשי פיתוח</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">בפעילות רציפה בפרודקשן</div>
+      </div>
+    </div>
+
+    <p>פלטפורמת ERP מלאה לניהול לוח הזמנים והפעילות התפעולית:</p>
+    <ul>
+      <li>תבנית שנתית + לוח זמנים שנתי שנוצר אוטומטית</li>
+      <li>עריכת לוח זמנים ברמת היום עם freeze / unfreeze / rollback</li>
+      <li>חילופי מורים</li>
+      <li>ביטולים ודחיות שיעורים</li>
+      <li>יצירת שיעורים חדשים ופעילויות נוספות</li>
+      <li>תהליך הזמנת ציוד מעבדה</li>
+      <li>תור בקשות (עיקרון "חלון אחד")</li>
+      <li>הרשאות מדורגות לפי תפקיד</li>
+      <li>לוחות תצוגה במסדרונות למורים ולתלמידים</li>
+      <li>Audit log בלתי ניתן לשינוי לחלוטין</li>
+    </ul>
+
+    <p><strong>מחסנית טכנולוגית:</strong></p>
+    <div class="chips">
+      <span class="chip">PostgreSQL 16</span>
+      <span class="chip">PL/pgSQL</span>
+      <span class="chip">Node.js + Express</span>
+      <span class="chip">Vue 3 + PrimeVue (RTL)</span>
+      <span class="chip">Docker · AWS · Cloudflare Tunnel</span>
+    </div>
+
+    <ul>
+      <li><strong>PostgreSQL</strong> — נבחר בזכות תמיכה native ב-EXCLUDE USING GIST. הדבר מאפשר
+        ברמת מנוע בסיס הנתונים להבטיח היעדר חפיפות בין טווחי זמן, ולמנוע אוטומטית race conditions
+        בבקשות מקבילות.</li>
+      <li><strong>לוגיקה בבסיס הנתונים</strong> — העברת האינווריאנטים לבסיס הנתונים יצרה מקור אמת
+        יחיד ושלמות נתונים ללא תלות בנקודת הכניסה (API, סקריפטים ברקע, או session ישיר של מנהל).</li>
+      <li><strong>Node.js + Express</strong> — שער API דק וללא state (Thin API Gateway), המוגבל
+        לאימות ולניתוב בקשות, ללא שכפול לוגיקה עסקית.</li>
+      <li><strong>Vue 3 + PrimeVue</strong> — קיצר את זמן ההגעה לשוק (time-to-market) הודות
+        לאקוסיסטם מוכן של רכיבי UI מורכבים למסכי ניהול.</li>
+      <li><strong>Cloudflare Tunnel</strong> — בידד את התשתית לפי עקרון Zero Trust, וביטל לחלוטין
+        את הצורך בחשיפת IP ציבורי או פתיחת פורטים נכנסים.</li>
+    </ul>
+
+    <p><strong>מבנה הפרויקט:</strong></p>
+    <div class="screenshot">
+      <img src="img/project-structure.png" alt="מבנה הפרויקט" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>מבנה ה-repository</strong> — המערכת תוכננה מהיום הראשון עם הפרדה ברורה בין
+        האפליקציה, לוגיקת בסיס הנתונים, והתשתית.
+      </div>
+    </div>
+
+
+    <p><strong>המערכת בחיים האמיתיים:</strong></p>
+    <div class="screenshot">
+      <img src="img/t_corridor-display.jpg" alt="לוח תצוגה בחדר המורים" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח תצוגה בחדר המורים</strong> — בשידור חי, על קיר המרכז החינוכי.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/s_corridor-display.jpg" alt="לוח תצוגה לתלמידים" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח תצוגה לתלמידים</strong> — בשידור חי, על קיר המרכז החינוכי.
+      </div>
+    </div>
+
+
+    <h2>ממשק המערכת</h2>
+    <p style="color:var(--muted); font-size:0.95rem; margin-bottom:8px;">
+      לחצו על כל צילום מסך כדי לפתוח אותו בגודל מלא.
+    </p>
+
+    <div class="screenshot">
+      <img src="img/daily-gantt.png" alt="גאנט יומי" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>גאנט יומי</strong> — לוח הזמנים החי של היום לפי חדרים. קידוד צבעים לפי מקצוע,
+        הדגשת מחליפים, ומחוון זמן נוכחי.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/basic-schedule-template.png" alt="תבנית בסיסית" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>תבנית שנתית (Basic Schedule)</strong> — מקור האמת. שינויים ממנה מופצים בבטחה
+        ללוח הזמנים השנתי שנוצר, בעזרת אלגוריתם דו-שלבי.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/teacher-dashboard.png" alt="לוח בקרה למורה" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח בקרה למורה</strong> — סביבת עבודה אישית: שיעורים קרובים, בקשות ציוד, היסטוריית
+        חילופים, ולוח זמנים אישי.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/admin-dashboard.png" alt="לוח בקרה למנהל" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח בקרה למנהל</strong> — ה"חלון האחד" המרכזי. מורים רק מגישים בקשות; מנהלים
+        בודקים, מתאימים, ומיישמים את השינויים.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/lab-assistant-dashboard.png" alt="לוח בקרה ללבורנט" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח בקרה ללבורנט</strong> — תצוגה תפעולית: הזמנות ציוד והערות ליום נבחר.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/audit-log.png" alt="Audit Log" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Audit Log</strong> — היסטוריה בלתי ניתנת לשינוי לחלוטין של כל פעולה משמעותית.
+        אפילו סופר-אדמין לא יכול לערוך או למחוק רשומה.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/student-dashboard.png" alt="לוח תצוגה לתלמידים" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>לוח תצוגה לתלמידים</strong> — מסך ציבורי המציג את לוח הזמנים החי.
+      </div>
+    </div>
+
+    <h2>תרבות הנדסית — קוד ותיעוד</h2>
+    <p>
+      אחד העקרונות המרכזיים בפרויקט: לוגיקה והחלטות מוסברות ישירות בקוד — לא רק <em>מה</em>
+      הפונקציה עושה, אלא גם <em>למה</em> היא קיימת ומה ישבר אם יופר האינווריאנט.
+    </p>
+
+    <h3>1. הפרדה ברורה בין מבנה ללוגיקה עסקית</h3>
+    <div class="screenshot">
+      <img src="img/code-schema-sql.png" alt="הערות ב-schema.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>schema.sql</strong> — כלל מפורש: הקובץ הזה מכיל רק מבנה. הלוגיקה העסקית חיה
+        בקבצים המודולריים.
+      </div>
+    </div>
+
+    <h3>2. בחירת חדר לפי כללים עסקיים מפורשים</h3>
+    <div class="screenshot">
+      <img src="img/code-find-room.png" alt="הפונקציה _find_room" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>campus._find_room()</strong> — כללי עדיפות לחדרים עבור פיזיקה וכימיה מתועדים
+        ומקודדים ישירות בשאילתה.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/code-year-schedule.png" alt="כותרת year_schedule.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>year_schedule.sql</strong> — בכותרת הקובץ מוסבר תפקידה של כל פונקציה מרכזית,
+        וזרימת ה-freeze / unfreeze של יום.
+      </div>
+    </div>
+
+    <h2>תוצאות</h2>
+    <ul>
+      <li>המערכת פועלת בהצלחה בפרודקשן החל מאוגוסט 2026</li>
+      <li>עומדת בעומס התפעולי היומיומי האמיתי של המרכז</li>
+      <li>אינווריאנטים קריטיים (קונפליקטים בלוח הזמנים, הרשאות גישה, audit) נאכפים ברמת בסיס
+        הנתונים</li>
+      <li>היסטוריה מלאה ובלתי ניתנת לשינוי של כל פעולה משמעותית</li>
+      <li>כ-50 עובדים משתמשים במערכת מדי יום</li>
+    </ul>
+
+    <footer>
+      <a href="https://www.linkedin.com/in/oleksandr-shevchuk-tech/" target="_blank" rel="noopener"
+        style="color:var(--accent); text-decoration:none;">LinkedIn</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
+      <br><br>
+      המקרה הוכן עבור תיק עבודות (portfolio). פרטים עסקיים הוסתרו במקום הצורך.
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightbox-img" src="" alt="צילום מסך מוגדל">
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+
+</html>

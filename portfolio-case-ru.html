@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP-система расписания — Кейс</title>
+  <style>
+    :root {
+      --primary: #1f3864;
+      --accent: #2e75b6;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin: 48px 0 16px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #dbeafe;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin: 28px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    ul {
+      margin: 12px 0 16px 22px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .highlight {
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .role-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 20px 22px;
+      margin: 20px 0;
+    }
+
+    .screenshot {
+      margin: 28px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .screenshot img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: opacity 0.15s;
+    }
+
+    .screenshot img:hover {
+      opacity: 0.92;
+    }
+
+    .screenshot-caption {
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== CHIPS ===== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .chip {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.92rem;
+      padding: 7px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      cursor: default;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 2.2rem;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>ERP-система расписания для образовательного центра</h1>
+      <div class="role-tag" style="display:inline-block;background:#eff6ff;color:#1f3864;
+        font-size:0.85rem;padding:4px 12px;border-radius:999px;margin-bottom:10px;">
+        Product &amp; Systems Architect — Oleksandr Shevchuk (Cyberdayag)
+      </div>
+      <div class="meta">
+        <strong>Суть кейса:</strong> замена легаси на базе Excel современным веб-приложением.<br>
+        <strong>Разработка:</strong> февраль — середина августа 2026.<br>
+        <strong>Прод:</strong> с середины августа 2026.<br>
+        <strong>Статус:</strong> прод стабилен, работает без сбоев, продолжается разработка нового
+        функционала и дополнительных модулей.
+      </div>
+    </header>
+
+    <h2>Контекст и проблема</h2>
+    <p>
+      После начала работы в научно-образовательном центре физики и химии я обнаружил,
+      что организация работает на тяжёлой системе, построенной на базе Excel.
+      Она постоянно падала, зависала под нагрузкой и делала ежедневные операционные изменения
+      крайне болезненными и подверженными ошибкам.
+    </p>
+
+    <strong>Масштаб операционной нагрузки:</strong>
+    <div class="chips">
+      <span class="chip">26 школ-партнёров</span>
+      <span class="chip">до 50 уроков в день</span>
+      <span class="chip">105 учебных групп</span>
+      <span class="chip">специализированные лаборатории</span>
+      <span class="chip">частые замены преподавателей, отмены и переносы уроков</span>
+      <span class="chip">заказы оборудования</span>
+    </div>
+
+    <p>
+      Опыт работы с транзакционными системами сформировал простой принцип: любое изменение
+      расписания или ресурсов должно обрабатываться так же строго, как банковская операция.
+      Поэтому я спроектировал систему, гарантирующую целостность на уровне СУБД, неизменяемый
+      Audit Log и возможность безопасного отката (rollback) любого дня.
+    </p>
+
+    <h2>Моя роль</h2>
+    <div class="role-box">
+      <p>
+        Изучив бизнес-процессы центра, я самостоятельно спроектировал архитектуру системы: модель
+        данных, ключевые бизнес-инварианты, ролевую модель доступа, механизмы разрешения конфликтов.
+        Также спроектировал схему деплоя (AWS EC2 + Cloudflare Tunnel) и процесс резервного
+        копирования (AWS S3) с проверенным восстановлением после полного сбоя.
+      </p>
+      <p>
+        С AI я работал как техлид с командой разработчиков: ставил задачи, определял решение
+        каждой из них, пошагово проверял код на каждом шаге, прежде чем принять его в систему.
+      </p>
+    </div>
+
+    <h2>Обзор системы</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">27</div>
+        <div class="stat-label">таблиц в схеме БД</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">38</div>
+        <div class="stat-label">функций PL/pgSQL — бизнес-логика в БД</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">495</div>
+        <div class="stat-label">коммитов за 6 месяцев разработки</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">в реальной эксплуатации</div>
+      </div>
+    </div>
+
+    <p>Полноценная ERP-платформа для управления расписанием и операционной деятельностью:</p>
+    <ul>
+      <li>Годовой шаблон + генерируемое годовое расписание</li>
+      <li>Редактирование расписания на уровне дня с freeze / unfreeze / rollback</li>
+      <li>Замены учителей</li>
+      <li>Отмены и переносы уроков</li>
+      <li>Создание новых уроков и дополнительных занятий</li>
+      <li>Процесс заказа лабораторного оборудования</li>
+      <li>Очередь заявок (принцип «одного окна»)</li>
+      <li>Гранулярный ролевой доступ</li>
+      <li>Коридорные ТВ-табло для учителей и учеников</li>
+      <li>Полностью неизменяемый audit log</li>
+    </ul>
+
+    <p><strong>Технологический стек:</strong></p>
+    <div class="chips">
+      <span class="chip">PostgreSQL 16</span>
+      <span class="chip">PL/pgSQL</span>
+      <span class="chip">Node.js + Express</span>
+      <span class="chip">Vue 3 + PrimeVue (RTL)</span>
+      <span class="chip">Docker · AWS · Cloudflare Tunnel</span>
+    </div>
+
+    <ul>
+      <li><strong>PostgreSQL</strong> — выбран ради нативной поддержки EXCLUDE USING GIST. Это
+        позволяет на уровне движка СУБД гарантировать отсутствие пересечений временных интервалов
+        и автоматически исключать race conditions при параллельных запросах.</li>
+      <li><strong>Логика в БД</strong> — перенос инвариантов в СУБД обеспечил единый источник правды
+        и целостность данных независимо от точки подключения (API, фоновые скрипты или прямые админ-сессии).</li>
+      <li><strong>Node.js + Express</strong> — тонкий stateless-шлюз (Thin API Gateway),
+        ограниченный задачами авторизации и транзита запросов без дублирования бизнес-логики.</li>
+      <li><strong>Vue 3 + PrimeVue</strong> — сократил time-to-market за счёт готовой экосистемы
+        сложных UI-компонентов для административных экранов.</li>
+      <li><strong>Cloudflare Tunnel</strong> — изолировал инфраструктуру по принципу Zero Trust,
+        полностью исключив необходимость публикации публичного IP и открытия входящих портов.</li>
+    </ul>
+
+    <p><strong>Структура проекта:</strong></p>
+    <div class="screenshot">
+      <img src="img/project-structure.png" alt="Структура проекта" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Структура репозитория</strong> — система изначально спроектирована с чётким разделением
+        приложения, логики БД и инфраструктуры.
+      </div>
+    </div>
+
+
+    <p><strong>Система в реальной жизни:</strong></p>
+    <div class="screenshot">
+      <img src="img/t_corridor-display.jpg" alt="Коридорное табло в учительской в здании центра"
+        onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Коридорное табло в учительской</strong> — вживую на стене учебного центра.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/s_corridor-display.jpg" alt="Коридорное табло для учеников" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Коридорное табло для учеников</strong> — вживую на стене учебного центра.
+      </div>
+    </div>
+
+
+    <h2>Интерфейс системы</h2>
+    <p style="color:var(--muted); font-size:0.95rem; margin-bottom:8px;">
+      Нажмите на любой скриншот, чтобы открыть его в полном размере.
+    </p>
+
+    <div class="screenshot">
+      <img src="img/daily-gantt.png" alt="Дневной Гантт" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Дневной Гантт</strong> — актуальное расписание дня по кабинетам.
+        Цветовая кодировка предметов, подсветка замен, индикатор текущего времени.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/basic-schedule-template.png" alt="Базовый шаблон" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Годовой шаблон (Basic Schedule)</strong> — источник правды.
+        Изменения из него безопасно распространяются на сгенерированное годовое расписание
+        с помощью двухфазного алгоритма.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/teacher-dashboard.png" alt="Дашборд учителя" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Дашборд учителя</strong> — личный кабинет: ближайшие уроки, заявки на оборудование,
+        история замен и рабочий график.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/admin-dashboard.png" alt="Админ-дашборд" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Админ-дашборд</strong> — центральное «одно окно». Учителя только создают заявки,
+        администраторы рассматривают, корректируют и применяют изменения.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/lab-assistant-dashboard.png" alt="Дашборд лаборантов" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Дашборд лаборантов</strong> — операционная витрина: заказы оборудования
+        и заметки на выбранный день.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/audit-log.png" alt="Audit Log" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Audit Log</strong> — полностью неизменяемая история всех значимых действий.
+        Даже суперадмин не может изменить или удалить записи.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/student-dashboard.png" alt="Табло для учеников" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Табло для учеников</strong> — публичный экран с текущим расписанием.
+      </div>
+    </div>
+
+    <h2>Инженерная культура — код и документация</h2>
+    <p>
+      Один из ключевых принципов проекта: логика и решения объясняются прямо в коде —
+      не только <em>что</em> делает функция, но и <em>зачем</em> она нужна и что сломается,
+      если нарушить инвариант.
+    </p>
+
+    <h3>1. Чёткое разделение структуры и бизнес-логики</h3>
+    <div class="screenshot">
+      <img src="img/code-schema-sql.png" alt="Комментарии в schema.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>schema.sql</strong> — явное правило: здесь только структура.
+        Бизнес-логика живёт в модульных файлах.
+      </div>
+    </div>
+
+    <h3>2. Подбор кабинетов с явными бизнес-правилами</h3>
+    <div class="screenshot">
+      <img src="img/code-find-room.png" alt="Функция _find_room" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>campus._find_room()</strong> — правила приоритета кабинетов для физики и химии
+        задокументированы и закодированы прямо в запросе.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/code-year-schedule.png" alt="Заголовок year_schedule.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>year_schedule.sql</strong> — в шапке файла объясняется назначение каждой
+        ключевой функции и поток freeze / unfreeze дня.
+      </div>
+    </div>
+
+    <h2>Результаты</h2>
+    <ul>
+      <li>Система успешно работает в продакшене с августа 2026</li>
+      <li>Выдерживает реальную ежедневную операционную нагрузку центра</li>
+      <li>Критические инварианты (конфликты расписания, права доступа, аудит) обеспечиваются на уровне базы данных</li>
+      <li>Полная неизменяемая история всех значимых действий</li>
+      <li>В системе ежедневно работают ~50 сотрудников</li>
+    </ul>
+
+    <footer>
+      <a href="https://www.linkedin.com/in/oleksandr-shevchuk-tech/" target="_blank" rel="noopener"
+        style="color:var(--accent); text-decoration:none;">LinkedIn</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
+      <br><br>
+      Кейс подготовлен для портфолио. Бизнес-детали обезличены там, где это необходимо.
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightbox-img" src="" alt="Увеличенный скриншот">
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+
+</html>
