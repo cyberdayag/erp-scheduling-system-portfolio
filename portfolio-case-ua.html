@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP-система розкладу — Кейс</title>
+  <style>
+    :root {
+      --primary: #1f3864;
+      --accent: #2e75b6;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin: 48px 0 16px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #dbeafe;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin: 28px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    ul {
+      margin: 12px 0 16px 22px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .highlight {
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .role-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 20px 22px;
+      margin: 20px 0;
+    }
+
+    .screenshot {
+      margin: 28px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .screenshot img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: opacity 0.15s;
+    }
+
+    .screenshot img:hover {
+      opacity: 0.92;
+    }
+
+    .screenshot-caption {
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== CHIPS ===== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .chip {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.92rem;
+      padding: 7px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      cursor: default;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font-size: 2.2rem;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>ERP-система розкладу для освітнього центру</h1>
+      <div class="role-tag" style="display:inline-block;background:#eff6ff;color:#1f3864;
+        font-size:0.85rem;padding:4px 12px;border-radius:999px;margin-bottom:10px;">
+        Product &amp; Systems Architect — Oleksandr Shevchuk (Cyberdayag)
+      </div>
+      <div class="meta">
+        <strong>Суть кейсу:</strong> заміна легасі-системи на базі Excel сучасним веб-додатком.<br>
+        <strong>Розробка:</strong> лютий — середина серпня 2026.<br>
+        <strong>Прод:</strong> з середини серпня 2026.<br>
+        <strong>Статус:</strong> прод стабільний, працює без збоїв, триває розробка нового
+        функціоналу та додаткових модулів.
+      </div>
+    </header>
+
+    <h2>Контекст і проблема</h2>
+    <p>
+      Почавши працювати в науково-освітньому центрі фізики та хімії, я виявив,
+      що організація працює на важкій системі, побудованій на базі Excel.
+      Вона постійно падала, зависала під навантаженням і робила щоденні операційні зміни
+      вкрай болісними та схильними до помилок.
+    </p>
+
+    <strong>Масштаб операційного навантаження:</strong>
+    <div class="chips">
+      <span class="chip">26 шкіл-партнерів</span>
+      <span class="chip">до 50 уроків на день</span>
+      <span class="chip">105 навчальних груп</span>
+      <span class="chip">спеціалізовані лабораторії</span>
+      <span class="chip">часті заміни викладачів, скасування та перенесення уроків</span>
+      <span class="chip">замовлення обладнання</span>
+    </div>
+
+    <p>
+      Досвід роботи з транзакційними системами сформував простий принцип: будь-яка зміна
+      розкладу чи ресурсів має оброблятися так само суворо, як банківська операція.
+      Тому я спроєктував систему, що гарантує цілісність на рівні СУБД, незмінний
+      Audit Log і можливість безпечного відкату (rollback) будь-якого дня.
+    </p>
+
+    <h2>Моя роль</h2>
+    <div class="role-box">
+      <p>
+        Вивчивши бізнес-процеси центру, я самостійно спроєктував архітектуру системи: модель
+        даних, ключові бізнес-інваріанти, рольову модель доступу, механізми розв'язання конфліктів.
+        Також спроєктував схему деплою (AWS EC2 + Cloudflare Tunnel) та процес резервного
+        копіювання (AWS S3) з перевіреним відновленням після повного збою.
+      </p>
+      <p>
+        З AI я працював як техлід із командою розробників: ставив завдання, визначав рішення
+        кожного з них, покроково перевіряв код на кожному етапі, перш ніж прийняти його в систему.
+      </p>
+    </div>
+
+    <h2>Огляд системи</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">27</div>
+        <div class="stat-label">таблиць у схемі БД</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">38</div>
+        <div class="stat-label">функцій PL/pgSQL — бізнес-логіка в БД</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">495</div>
+        <div class="stat-label">комітів за 6 місяців розробки</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">у реальній експлуатації</div>
+      </div>
+    </div>
+
+    <p>Повноцінна ERP-платформа для управління розкладом та операційною діяльністю:</p>
+    <ul>
+      <li>Річний шаблон + згенерований на його основі розклад на рік</li>
+      <li>Редагування розкладу на рівні дня з freeze / unfreeze / rollback</li>
+      <li>Заміни викладачів</li>
+      <li>Скасування та перенесення уроків</li>
+      <li>Створення нових уроків і додаткових занять</li>
+      <li>Процес замовлення лабораторного обладнання</li>
+      <li>Черга заявок (принцип «одного вікна»)</li>
+      <li>Гранулярний рольовий доступ</li>
+      <li>Коридорні ТВ-табло для викладачів і учнів</li>
+      <li>Повністю незмінний audit log</li>
+    </ul>
+
+    <p><strong>Технологічний стек:</strong></p>
+    <div class="chips">
+      <span class="chip">PostgreSQL 16</span>
+      <span class="chip">PL/pgSQL</span>
+      <span class="chip">Node.js + Express</span>
+      <span class="chip">Vue 3 + PrimeVue (RTL)</span>
+      <span class="chip">Docker · AWS · Cloudflare Tunnel</span>
+    </div>
+
+    <ul>
+      <li><strong>PostgreSQL</strong> — обрано заради нативної підтримки EXCLUDE USING GIST. Це
+        дозволяє на рівні движка СУБД гарантувати відсутність перетинів часових інтервалів
+        і автоматично виключати race conditions за паралельних запитів.</li>
+      <li><strong>Логіка в БД</strong> — перенесення інваріантів у СУБД забезпечило єдине джерело правди
+        і цілісність даних незалежно від точки підключення (API, фонові скрипти чи прямі адмін-сесії).</li>
+      <li><strong>Node.js + Express</strong> — тонкий stateless-шлюз (Thin API Gateway),
+        обмежений завданнями авторизації та транзиту запитів без дублювання бізнес-логіки.</li>
+      <li><strong>Vue 3 + PrimeVue</strong> — скоротив time-to-market завдяки готовій екосистемі
+        складних UI-компонентів для адміністративних екранів.</li>
+      <li><strong>Cloudflare Tunnel</strong> — ізолював інфраструктуру за принципом Zero Trust,
+        повністю виключивши потребу публікації публічного IP та відкриття вхідних портів.</li>
+    </ul>
+
+    <p><strong>Структура проєкту:</strong></p>
+    <div class="screenshot">
+      <img src="img/project-structure.png" alt="Структура проєкту" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Структура репозиторію</strong> — система від початку спроєктована з чітким поділом
+        застосунку, логіки БД та інфраструктури.
+      </div>
+    </div>
+
+
+    <p><strong>Система в реальному житті:</strong></p>
+    <div class="screenshot">
+      <img src="img/t_corridor-display.jpg" alt="Коридорне табло у вчительській у будівлі центру"
+        onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Коридорне табло у вчительській</strong> — наживо на стіні навчального центру.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/s_corridor-display.jpg" alt="Коридорне табло для учнів" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Коридорне табло для учнів</strong> — наживо на стіні навчального центру.
+      </div>
+    </div>
+
+
+    <h2>Інтерфейс системи</h2>
+    <p style="color:var(--muted); font-size:0.95rem; margin-bottom:8px;">
+      Натисніть на будь-який скриншот, щоб відкрити його у повному розмірі.
+    </p>
+
+    <div class="screenshot">
+      <img src="img/daily-gantt.png" alt="Денний Гантт" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Денний Гантт</strong> — актуальний розклад дня по кабінетах.
+        Кольорове кодування предметів, підсвітка замін, індикатор поточного часу.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/basic-schedule-template.png" alt="Базовий шаблон" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Річний шаблон (Basic Schedule)</strong> — джерело правди.
+        Зміни з нього безпечно поширюються на згенерований річний розклад
+        за допомогою двофазного алгоритму.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/teacher-dashboard.png" alt="Дашборд викладача" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Дашборд викладача</strong> — особистий кабінет: найближчі уроки, заявки на обладнання,
+        історія замін та робочий графік.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/admin-dashboard.png" alt="Адмін-дашборд" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Адмін-дашборд</strong> — центральне «одне вікно». Викладачі лише створюють заявки,
+        адміністратори розглядають, коригують і застосовують зміни.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/lab-assistant-dashboard.png" alt="Дашборд лаборантів" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Дашборд лаборантів</strong> — операційна вітрина: замовлення обладнання
+        та нотатки на обраний день.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/audit-log.png" alt="Audit Log" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Audit Log</strong> — повністю незмінна історія всіх значущих дій.
+        Навіть суперадмін не може змінити чи видалити записи.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/student-dashboard.png" alt="Табло для учнів" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Табло для учнів</strong> — публічний екран з поточним розкладом.
+      </div>
+    </div>
+
+    <h2>Інженерна культура — код і документація</h2>
+    <p>
+      Один із ключових принципів проєкту: логіка і рішення пояснюються прямо в коді —
+      не лише <em>що</em> робить функція, а й <em>навіщо</em> вона потрібна і що зламається,
+      якщо порушити інваріант.
+    </p>
+
+    <h3>1. Чіткий поділ структури та бізнес-логіки</h3>
+    <div class="screenshot">
+      <img src="img/code-schema-sql.png" alt="Коментарі в schema.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>schema.sql</strong> — явне правило: тут лише структура.
+        Бізнес-логіка живе в модульних файлах.
+      </div>
+    </div>
+
+    <h3>2. Підбір кабінетів із явними бізнес-правилами</h3>
+    <div class="screenshot">
+      <img src="img/code-find-room.png" alt="Функція _find_room" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>campus._find_room()</strong> — правила пріоритету кабінетів для фізики та хімії
+        задокументовані й закодовані прямо в запиті.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/code-year-schedule.png" alt="Заголовок year_schedule.sql" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>year_schedule.sql</strong> — у шапці файлу пояснюється призначення кожної
+        ключової функції та потік freeze / unfreeze дня.
+      </div>
+    </div>
+
+    <h2>Результати</h2>
+    <ul>
+      <li>Система успішно працює в продакшені з серпня 2026</li>
+      <li>Витримує реальне щоденне операційне навантаження центру</li>
+      <li>Критичні інваріанти (конфлікти розкладу, права доступу, аудит) забезпечуються на рівні бази даних</li>
+      <li>Повна незмінна історія всіх значущих дій</li>
+      <li>У системі щодня працюють ~50 співробітників</li>
+    </ul>
+
+    <footer>
+      <a href="https://www.linkedin.com/in/oleksandr-shevchuk-tech/" target="_blank" rel="noopener"
+        style="color:var(--accent); text-decoration:none;">LinkedIn</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
+      <br><br>
+      Кейс підготовлено для портфоліо. Бізнес-деталі знеособлені там, де це необхідно.
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightbox-img" src="" alt="Збільшений скриншот">
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+
+</html>
