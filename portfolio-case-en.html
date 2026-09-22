@@ -263,10 +263,23 @@
     </div>
 
     <p>
-      My experience with transactional systems shaped a simple principle: any change to a schedule
-      or a resource should be handled with the same rigor as a banking operation. So I designed a
-      system that guarantees data integrity at the database level, an immutable audit log, and the
-      ability to safely roll back any day.
+      That's exactly why I decided to build a system that would make schedule and resource
+      management more reliable and predictable. In my free time outside my main job, I built my
+      own <strong>Scheduling System</strong>, and in mid-August, just before the new school year, I
+      deployed and configured a dedicated instance of it for the center, free of charge, to make my
+      colleagues' daily work easier.
+    </p>
+
+    <p>
+      My experience with relational databases shaped the project's core architectural principle:
+      schedule and resource changes should be handled as transactions, not as simple spreadsheet
+      edits.
+    </p>
+
+    <p>
+      Data integrity was pushed down to the database level, the change history is immutable via an
+      <strong>Audit Log</strong>, and the architecture allows safely restoring the schedule state
+      for any given day.
     </p>
 
     <h2>My Role</h2>
@@ -279,9 +292,8 @@
         disaster-recovery drill.
       </p>
       <p>
-        I worked with AI the way a tech lead works with a development team: I set the tasks, decided
-        on the solution for each one, and reviewed the code step by step before accepting it into
-        the system.
+        I worked with AI as a tech lead: I set the tasks, made the architectural decisions, reviewed
+        the implementation, and only merged code into the system after a step-by-step review.
       </p>
     </div>
 
@@ -302,11 +314,11 @@
       </div>
       <div class="stat">
         <div class="stat-value">24/7</div>
-        <div class="stat-label">in live production</div>
+        <div class="stat-label">production availability</div>
       </div>
     </div>
 
-    <p>A full ERP platform for schedule and operations management:</p>
+    <p>An ERP system for schedule and operations management:</p>
     <ul>
       <li>Annual template + a generated year-long schedule</li>
       <li>Day-level schedule editing with freeze / unfreeze / rollback</li>
@@ -331,7 +343,7 @@
 
     <ul>
       <li><strong>PostgreSQL</strong> — chosen for native support of EXCLUDE USING GIST. At the
-        database engine level, this guarantees no overlapping time intervals and automatically
+        database engine level, this ensures no overlapping time intervals and automatically
         rules out race conditions on concurrent requests.</li>
       <li><strong>Logic in the database</strong> — moving invariants into the database gave a single
         source of truth and data integrity regardless of the entry point (API, background jobs, or
@@ -368,6 +380,16 @@
       <img src="img/s_corridor-display.jpg" alt="Corridor display for students" onclick="openLightbox(this)">
       <div class="screenshot-caption">
         <strong>Corridor display for students</strong> — live, on the wall of the education center.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/production-monitoring.png" alt="Production monitoring" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Production monitoring</strong> — the system is under continuous external uptime
+        monitoring. Uptime over the last month — 99.965%. Both recorded incidents were planned
+        outages during version deployments, including database migrations and backend/frontend
+        container restarts.
       </div>
     </div>
 
@@ -475,14 +497,19 @@
       <li>About 50 staff members use the system every day</li>
     </ul>
 
+    <div class="highlight">
+      <a href="overview/scheduling_system_overview_en.html" style="color:var(--accent); font-weight:600; text-decoration:none;">Full ERP Scheduling System product overview →</a>
+      <br>A separate document with the full product overview: architecture, roles, data-integrity guarantees.
+    </div>
+
     <footer>
       <a href="https://www.linkedin.com/in/oleksandr-shevchuk-tech/" target="_blank" rel="noopener"
         style="color:var(--accent); text-decoration:none;">LinkedIn</a>
       &nbsp;·&nbsp;
       <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
       <br><br>
-      This case study was prepared for a portfolio. Business details have been anonymized where
-      necessary.
+      This case study was prepared for a portfolio. Staff personal data (names, phone numbers,
+      emails) in the screenshots have been hidden or changed.
     </footer>
 
   </div>

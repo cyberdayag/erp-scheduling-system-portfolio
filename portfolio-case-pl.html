@@ -264,10 +264,23 @@
     </div>
 
     <p>
-      Doświadczenie w pracy z systemami transakcyjnymi ukształtowało prostą zasadę: każda zmiana
-      w harmonogramie czy zasobach powinna być obsługiwana równie rygorystycznie jak operacja bankowa.
-      Dlatego zaprojektowałem system gwarantujący spójność danych na poziomie bazy danych, niezmienny
-      Audit Log oraz możliwość bezpiecznego cofnięcia (rollback) dowolnego dnia.
+      Właśnie dlatego postanowiłem stworzyć system, który uczyniłby zarządzanie harmonogramem i
+      zasobami bardziej niezawodnym i przewidywalnym. W czasie wolnym od pracy głównej opracowałem
+      własny produkt — <strong>Scheduling System</strong>, a w połowie sierpnia, tuż przed
+      rozpoczęciem nowego roku szkolnego, bezpłatnie wdrożyłem i skonfigurowałem dedykowaną kopię
+      systemu dla centrum edukacyjnego, aby ułatwić kolegom codzienną pracę.
+    </p>
+
+    <p>
+      Doświadczenie w pracy z relacyjnymi bazami danych ukształtowało główną zasadę architektoniczną
+      projektu: zmiany w harmonogramie i zasobach powinny być obsługiwane jak transakcje, a nie jak
+      zwykła edycja tabel.
+    </p>
+
+    <p>
+      Kontrola spójności danych została przeniesiona na poziom bazy danych, historia zmian jest
+      niezmienna dzięki <strong>Audit Log</strong>, a architektura pozwala bezpiecznie przywrócić
+      stan harmonogramu na dowolny dzień.
     </p>
 
     <h2>Moja rola</h2>
@@ -279,8 +292,8 @@
         (AWS S3) z przetestowanym odzyskiwaniem po całkowitej awarii.
       </p>
       <p>
-        Z AI pracowałem jak tech lead z zespołem programistów: definiowałem zadania, wyznaczałem rozwiązanie
-        dla każdego z nich i krok po kroku weryfikowałem kod, zanim trafił do systemu.
+        Z AI pracowałem jak tech lead: definiowałem zadania, podejmowałem decyzje architektoniczne,
+        weryfikowałem implementację i włączałem kod do systemu dopiero po weryfikacji krok po kroku.
       </p>
     </div>
 
@@ -301,11 +314,11 @@
       </div>
       <div class="stat">
         <div class="stat-value">24/7</div>
-        <div class="stat-label">w rzeczywistej eksploatacji</div>
+        <div class="stat-label">dostępność systemu produkcyjnego</div>
       </div>
     </div>
 
-    <p>Pełnoprawna platforma ERP do zarządzania harmonogramem i działalnością operacyjną:</p>
+    <p>System ERP do zarządzania harmonogramem i działalnością operacyjną:</p>
     <ul>
       <li>Szablon roczny + generowany na jego podstawie harmonogram roczny</li>
       <li>Edycja harmonogramu na poziomie dnia z freeze / unfreeze / rollback</li>
@@ -330,7 +343,7 @@
 
     <ul>
       <li><strong>PostgreSQL</strong> — wybrany ze względu na natywne wsparcie dla EXCLUDE USING GIST. Pozwala to
-        na poziomie silnika bazy danych zagwarantować brak nakładania się przedziałów czasowych
+        na poziomie silnika bazy danych zapewnić brak nakładania się przedziałów czasowych
         i automatycznie wyeliminować race conditions przy równoległych zapytaniach.</li>
       <li><strong>Logika w bazie danych</strong> — przeniesienie niezmienników do bazy danych zapewniło jedno źródło prawdy
         i spójność danych niezależnie od punktu połączenia (API, skrypty w tle czy bezpośrednie sesje administracyjne).</li>
@@ -365,6 +378,16 @@
       <img src="img/s_corridor-display.jpg" alt="Telebim korytarzowy dla uczniów" onclick="openLightbox(this)">
       <div class="screenshot-caption">
         <strong>Telebim korytarzowy dla uczniów</strong> — na żywo, na ścianie centrum edukacyjnego.
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="img/production-monitoring.png" alt="Production monitoring" onclick="openLightbox(this)">
+      <div class="screenshot-caption">
+        <strong>Production monitoring</strong> — system znajduje się pod stałym zewnętrznym
+        monitoringiem dostępności. Uptime w ostatnim miesiącu — 99,965%. Oba zarejestrowane
+        incydenty to planowane przestoje podczas wdrażania nowych wersji, w tym migracje bazy
+        danych i restart kontenerów backend/frontend.
       </div>
     </div>
 
@@ -478,7 +501,8 @@
       &nbsp;·&nbsp;
       <a href="mailto:cyberdayag@gmail.com" style="color:var(--accent); text-decoration:none;">cyberdayag@gmail.com</a>
       <br><br>
-      Case study przygotowane do portfolio. Szczegóły biznesowe zanonimizowano tam, gdzie było to konieczne.
+      Case study przygotowane do portfolio. Dane osobowe pracowników (imiona, numery telefonów,
+      adresy e-mail) na zrzutach ekranu zostały ukryte lub zmienione.
     </footer>
 
   </div>
