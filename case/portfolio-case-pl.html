@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ERP Scheduling System — Case Study</title>
-  <link rel="icon" type="image/png" href="img/favicon.png">
+  <title>System ERP do harmonogramowania — Case Study</title>
+  <link rel="icon" type="image/png" href="../img/favicon.png">
   <style>
     :root {
       --primary: #1f3864;
@@ -249,129 +249,129 @@
   <div class="lang-switch" id="langSwitch">
     <button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z" /></svg>
-      <span>EN</span>
+      <span>PL</span>
       <span class="chevron">▼</span>
     </button>
     <div class="lang-switch-menu" id="langSwitchMenu">
-      <a href="portfolio-case-en.html" class="active">English</a>
+      <a href="portfolio-case-en.html">English</a>
       <a href="portfolio-case-he.html" dir="rtl">עברית</a>
       <a href="portfolio-case-ua.html">Українська</a>
-      <a href="portfolio-case-pl.html">Polski</a>
+      <a href="portfolio-case-pl.html" class="active">Polski</a>
       <a href="portfolio-case-ru.html">Русский</a>
     </div>
   </div>
 
   <div class="page-nav">
-    <a href="index.html">← Back</a>
-    <a href="overview/scheduling_system_overview_en.html">Technical overview</a>
+    <a href="../index.html">← Back</a>
+    <a href="../overview/scheduling_system_overview_pl.html">Technical overview</a>
     <div class="disabled-item">Live demo<span class="soon-badge">Soon</span></div>
   </div>
 
   <div class="container">
 
     <header>
-      <h1>ERP Scheduling System for an Education Center</h1>
+      <h1>System ERP do harmonogramowania dla centrum edukacyjnego</h1>
       <div class="role-tag" style="display:inline-block;background:#eff6ff;color:#1f3864;
         font-size:0.85rem;padding:4px 12px;border-radius:999px;margin-bottom:10px;">
         Product &amp; Systems Architect — Oleksandr Shevchuk (Cyberdayag)
       </div>
       <div class="meta">
-        <strong>Summary:</strong> replaced a legacy Excel-based system with a modern web application.<br>
-        <strong>Development:</strong> February — mid-August 2026.<br>
-        <strong>Production:</strong> since mid-August 2026.<br>
-        <strong>Status:</strong> production is stable and running without failures; development of
-        new features and modules continues.
+        <strong>Streszczenie:</strong> zastąpienie przestarzałego systemu opartego na Excelu nowoczesną aplikacją webową.<br>
+        <strong>Rozwój:</strong> luty — połowa sierpnia 2026.<br>
+        <strong>Produkcja:</strong> od połowy sierpnia 2026.<br>
+        <strong>Status:</strong> system działa stabilnie na produkcji, bez awarii, trwają prace nad
+        nowymi funkcjami i dodatkowymi modułami.
       </div>
     </header>
 
-    <h2>Context and Problem</h2>
+    <h2>Kontekst i problem</h2>
     <p>
-      After I started working with a science education center for physics and chemistry, I found
-      the organization running on a legacy system built on Excel. It kept crashing, froze under
-      load, and made daily operational changes painful and error-prone.
+      Po rozpoczęciu pracy w naukowo-edukacyjnym centrum fizyki i chemii odkryłem,
+      że organizacja korzysta z ciężkiego systemu zbudowanego na bazie Excela.
+      System stale się zawieszał, nie radził sobie pod obciążeniem, a codzienne zmiany operacyjne
+      były wyjątkowo uciążliwe i podatne na błędy.
     </p>
 
-    <strong>Scale of operations:</strong>
+    <strong>Skala obciążenia operacyjnego:</strong>
     <div class="chips">
-      <span class="chip">26 partner schools</span>
-      <span class="chip">up to 50 lessons per day</span>
-      <span class="chip">105 student groups</span>
-      <span class="chip">specialized laboratories</span>
-      <span class="chip">frequent teacher substitutions, cancellations and reschedules</span>
-      <span class="chip">equipment orders</span>
+      <span class="chip">26 szkół partnerskich</span>
+      <span class="chip">do 50 lekcji dziennie</span>
+      <span class="chip">105 grup uczniowskich</span>
+      <span class="chip">specjalistyczne laboratoria</span>
+      <span class="chip">częste zastępstwa nauczycieli, odwołania i przełożenia lekcji</span>
+      <span class="chip">zamówienia sprzętu</span>
     </div>
 
     <p>
-      That's exactly why I decided to build a system that would make schedule and resource
-      management more reliable and predictable. In my free time outside my main job, I built my
-      own <strong>Scheduling System</strong>, and in mid-August, just before the new school year, I
-      deployed and configured a dedicated instance of it for the center, free of charge, to make my
-      colleagues' daily work easier.
+      Właśnie dlatego postanowiłem stworzyć system, który uczyniłby zarządzanie harmonogramem i
+      zasobami bardziej niezawodnym i przewidywalnym. W czasie wolnym od pracy głównej opracowałem
+      własny produkt — <strong>Scheduling System</strong>, a w połowie sierpnia, tuż przed
+      rozpoczęciem nowego roku szkolnego, bezpłatnie wdrożyłem i skonfigurowałem dedykowaną kopię
+      systemu dla centrum edukacyjnego, aby ułatwić kolegom codzienną pracę.
     </p>
 
     <p>
-      My experience with relational databases shaped the project's core architectural principle:
-      schedule and resource changes should be handled as transactions, not as simple spreadsheet
-      edits.
+      Doświadczenie w pracy z relacyjnymi bazami danych ukształtowało główną zasadę architektoniczną
+      projektu: zmiany w harmonogramie i zasobach powinny być obsługiwane jak transakcje, a nie jak
+      zwykła edycja tabel.
     </p>
 
     <p>
-      Data integrity was pushed down to the database level, the change history is immutable via an
-      <strong>Audit Log</strong>, and the architecture allows safely restoring the schedule state
-      for any given day.
+      Kontrola spójności danych została przeniesiona na poziom bazy danych, historia zmian jest
+      niezmienna dzięki <strong>Audit Log</strong>, a architektura pozwala bezpiecznie przywrócić
+      stan harmonogramu na dowolny dzień.
     </p>
 
-    <h2>My Role</h2>
+    <h2>Moja rola</h2>
     <div class="role-box">
       <p>
-        After studying the center's business processes, I independently designed the system
-        architecture: the data model, the core business invariants, the role-based access model,
-        and the conflict-resolution mechanisms. I also designed the deployment setup (AWS EC2 +
-        Cloudflare Tunnel) and the backup process (AWS S3), validated through a full
-        disaster-recovery drill.
+        Po dogłębnym poznaniu procesów biznesowych centrum samodzielnie zaprojektowałem architekturę systemu: model
+        danych, kluczowe niezmienniki biznesowe, model dostępu oparty na rolach oraz mechanizmy rozwiązywania konfliktów.
+        Zaprojektowałem także schemat wdrożenia (AWS EC2 + Cloudflare Tunnel) oraz proces tworzenia kopii zapasowych
+        (AWS S3) z przetestowanym odzyskiwaniem po całkowitej awarii.
       </p>
       <p>
-        I worked with AI as a tech lead: I set the tasks, made the architectural decisions, reviewed
-        the implementation, and only merged code into the system after a step-by-step review.
+        Z AI pracowałem jak tech lead: definiowałem zadania, podejmowałem decyzje architektoniczne,
+        weryfikowałem implementację i włączałem kod do systemu dopiero po weryfikacji krok po kroku.
       </p>
     </div>
 
-    <h2>System Overview</h2>
+    <h2>Przegląd systemu</h2>
 
     <div class="stats">
       <div class="stat">
         <div class="stat-value">30</div>
-        <div class="stat-label">tables in the DB schema</div>
+        <div class="stat-label">tabel w schemacie bazy danych</div>
       </div>
       <div class="stat">
         <div class="stat-value">42</div>
-        <div class="stat-label">PL/pgSQL functions — business logic in the DB</div>
+        <div class="stat-label">funkcji PL/pgSQL — logika biznesowa w bazie danych</div>
       </div>
       <div class="stat">
         <div class="stat-value">563</div>
-        <div class="stat-label">commits over 8 months of development</div>
+        <div class="stat-label">commitów w ciągu 8 miesięcy rozwoju</div>
       </div>
       <div class="stat">
         <div class="stat-value">24/7</div>
-        <div class="stat-label">production availability</div>
+        <div class="stat-label">dostępność systemu produkcyjnego</div>
       </div>
     </div>
 
-    <p>An ERP system for schedule and operations management:</p>
+    <p>System ERP do zarządzania harmonogramem i działalnością operacyjną:</p>
     <ul>
-      <li>Annual template + a generated year-long schedule</li>
-      <li>Day-level schedule editing with freeze / unfreeze / rollback</li>
-      <li>Teacher substitutions</li>
-      <li>Lesson cancellations and reschedules</li>
-      <li>Creating new lessons and extra activities</li>
-      <li>Lab equipment ordering workflow</li>
-      <li>Request queue (a single-window approval workflow)</li>
-      <li>Granular role-based access</li>
-      <li>Corridor TV displays for teachers and students</li>
-      <li>Fully immutable audit log</li>
+      <li>Szablon roczny + generowany na jego podstawie harmonogram roczny</li>
+      <li>Edycja harmonogramu na poziomie dnia z freeze / unfreeze / rollback</li>
+      <li>Zastępstwa nauczycieli</li>
+      <li>Odwoływanie i przekładanie lekcji</li>
+      <li>Tworzenie nowych lekcji i zajęć dodatkowych</li>
+      <li>Proces zamawiania sprzętu laboratoryjnego</li>
+      <li>Kolejka zgłoszeń (zasada „jednego okienka")</li>
+      <li>Granularny dostęp oparty na rolach</li>
+      <li>Korytarzowe telebimy dla nauczycieli i uczniów</li>
+      <li>W pełni niezmienny audit log</li>
     </ul>
 
-    <p><strong>Technology stack:</strong></p>
+    <p><strong>Stos technologiczny:</strong></p>
     <div class="chips">
       <span class="chip">PostgreSQL 16</span>
       <span class="chip">PL/pgSQL</span>
@@ -381,164 +381,162 @@
     </div>
 
     <ul>
-      <li><strong>PostgreSQL</strong> — chosen for native support of EXCLUDE USING GIST. At the
-        database engine level, this ensures no overlapping time intervals and automatically
-        rules out race conditions on concurrent requests.</li>
-      <li><strong>Logic in the database</strong> — moving invariants into the database gave a single
-        source of truth and data integrity regardless of the entry point (API, background jobs, or
-        a direct admin session).</li>
-      <li><strong>Node.js + Express</strong> — a thin, stateless API gateway limited to
-        authentication and request routing, with no duplicated business logic.</li>
-      <li><strong>Vue 3 + PrimeVue</strong> — cut time-to-market thanks to a ready-made ecosystem of
-        complex UI components for admin screens.</li>
-      <li><strong>Cloudflare Tunnel</strong> — isolated the infrastructure on a Zero Trust basis,
-        removing the need to expose a public IP or open any inbound ports.</li>
+      <li><strong>PostgreSQL</strong> — wybrany ze względu na natywne wsparcie dla EXCLUDE USING GIST. Pozwala to
+        na poziomie silnika bazy danych zapewnić brak nakładania się przedziałów czasowych
+        i automatycznie wyeliminować race conditions przy równoległych zapytaniach.</li>
+      <li><strong>Logika w bazie danych</strong> — przeniesienie niezmienników do bazy danych zapewniło jedno źródło prawdy
+        i spójność danych niezależnie od punktu połączenia (API, skrypty w tle czy bezpośrednie sesje administracyjne).</li>
+      <li><strong>Node.js + Express</strong> — cienka, bezstanowa bramka (Thin API Gateway),
+        ograniczona do autoryzacji i przekazywania zapytań, bez duplikowania logiki biznesowej.</li>
+      <li><strong>Vue 3 + PrimeVue</strong> — skrócił time-to-market dzięki gotowemu ekosystemowi
+        złożonych komponentów UI dla ekranów administracyjnych.</li>
+      <li><strong>Cloudflare Tunnel</strong> — odizolował infrastrukturę zgodnie z zasadą Zero Trust,
+        eliminując potrzebę publikowania publicznego adresu IP i otwierania portów przychodzących.</li>
     </ul>
 
-    <p><strong>Project structure:</strong></p>
+    <p><strong>Struktura projektu:</strong></p>
     <div class="screenshot">
-      <img src="img/project-structure.png" alt="Project structure" onclick="openLightbox(this)">
+      <img src="../img/project-structure.png" alt="Struktura projektu" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Repository structure</strong> — the system was designed from day one with a clean
-        separation between the application, the database logic, and the infrastructure.
+        <strong>Struktura repozytorium</strong> — system od początku zaprojektowany z wyraźnym podziałem
+        aplikacji, logiki bazy danych i infrastruktury.
       </div>
     </div>
 
 
-    <p><strong>The system in real life:</strong></p>
+    <p><strong>System w praktyce:</strong></p>
     <div class="screenshot">
-      <img src="img/t_corridor-display.jpg" alt="Corridor display in the teachers' room"
+      <img src="../img/t_corridor-display.jpg" alt="Telebim korytarzowy w pokoju nauczycielskim w budynku centrum"
         onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Corridor display in the teachers' room</strong> — live, on the wall of the education
-        center.
+        <strong>Telebim korytarzowy w pokoju nauczycielskim</strong> — na żywo, na ścianie centrum edukacyjnego.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/s_corridor-display.jpg" alt="Corridor display for students" onclick="openLightbox(this)">
+      <img src="../img/s_corridor-display.jpg" alt="Telebim korytarzowy dla uczniów" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Corridor display for students</strong> — live, on the wall of the education center.
+        <strong>Telebim korytarzowy dla uczniów</strong> — na żywo, na ścianie centrum edukacyjnego.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/production-monitoring.png" alt="Production monitoring" onclick="openLightbox(this)">
+      <img src="../img/production-monitoring.png" alt="Production monitoring" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Production monitoring</strong> — the system is under continuous external uptime
-        monitoring. Uptime over the last month — 99.988%. The one recorded incident was a planned
-        outage during a version deployment, including a database migration and backend/frontend
-        container restart.
+        <strong>Production monitoring</strong> — system znajduje się pod stałym zewnętrznym
+        monitoringiem dostępności. Uptime w ostatnim miesiącu — 99,988%. Jedyny zarejestrowany
+        incydent to planowany przestój podczas wdrażania nowej wersji, w tym migracja bazy danych
+        i restart kontenerów backend/frontend.
       </div>
     </div>
 
 
-    <h2>System Interface</h2>
+    <h2>Interfejs systemu</h2>
     <p style="color:var(--muted); font-size:0.95rem; margin-bottom:8px;">
-      Click any screenshot to view it full-size.
+      Kliknij dowolny zrzut ekranu, aby otworzyć go w pełnym rozmiarze.
     </p>
 
     <div class="screenshot">
-      <img src="img/daily-gantt.png" alt="Daily Gantt" onclick="openLightbox(this)">
+      <img src="../img/daily-gantt.png" alt="Dzienny wykres Gantta" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Daily Gantt chart</strong> — the day's live schedule by room. Subject color-coding,
-        substitute highlighting, current-time indicator.
+        <strong>Dzienny wykres Gantta</strong> — aktualny harmonogram dnia w podziale na sale.
+        Kolorowe oznaczenia przedmiotów, podświetlenie zastępstw, wskaźnik bieżącego czasu.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/basic-schedule-template.png" alt="Basic schedule template" onclick="openLightbox(this)">
+      <img src="../img/basic-schedule-template.png" alt="Szablon podstawowy" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Annual template (Basic Schedule)</strong> — the source of truth. Changes propagate
-        safely to the generated yearly schedule through a two-phase algorithm.
+        <strong>Szablon roczny (Basic Schedule)</strong> — źródło prawdy.
+        Zmiany z niego są bezpiecznie propagowane do wygenerowanego harmonogramu rocznego
+        za pomocą dwufazowego algorytmu.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/teacher-dashboard.png" alt="Teacher dashboard" onclick="openLightbox(this)">
+      <img src="../img/teacher-dashboard.png" alt="Panel nauczyciela" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Teacher dashboard</strong> — a personal workspace: upcoming lessons, equipment
-        requests, substitution history, and work schedule.
+        <strong>Panel nauczyciela</strong> — osobisty pulpit: najbliższe lekcje, zgłoszenia sprzętu,
+        historia zastępstw i grafik pracy.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/admin-dashboard.png" alt="Admin dashboard" onclick="openLightbox(this)">
+      <img src="../img/admin-dashboard.png" alt="Panel administratora" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Admin dashboard</strong> — the central "single window." Teachers only submit
-        requests; admins review, adjust, and apply the changes.
+        <strong>Panel administratora</strong> — centralne „jedno okienko". Nauczyciele wyłącznie tworzą zgłoszenia,
+        administratorzy je rozpatrują, korygują i wprowadzają zmiany.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/lab-assistant-dashboard.png" alt="Lab assistant dashboard" onclick="openLightbox(this)">
+      <img src="../img/lab-assistant-dashboard.png" alt="Panel laborantów" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Lab assistant dashboard</strong> — an operational overview: equipment orders and
-        notes for a selected day.
+        <strong>Panel laborantów</strong> — operacyjny widok: zamówienia sprzętu
+        i notatki na wybrany dzień.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/audit-log.png" alt="Audit log" onclick="openLightbox(this)">
+      <img src="../img/audit-log.png" alt="Audit Log" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Audit log</strong> — a fully immutable history of every significant action. Even a
-        superadmin cannot edit or delete a record.
+        <strong>Audit Log</strong> — w pełni niezmienna historia wszystkich istotnych działań.
+        Nawet superadministrator nie może zmienić ani usunąć wpisów.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/student-dashboard.png" alt="Display board for students" onclick="openLightbox(this)">
+      <img src="../img/student-dashboard.png" alt="Tablica dla uczniów" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>Display board for students</strong> — a public screen with the live schedule.
+        <strong>Tablica dla uczniów</strong> — publiczny ekran z bieżącym harmonogramem.
       </div>
     </div>
 
-    <h2>Engineering Culture — Code and Documentation</h2>
+    <h2>Kultura inżynierska — kod i dokumentacja</h2>
     <p>
-      One of the project's core principles: logic and decisions are explained directly in the
-      code — not only <em>what</em> a function does, but <em>why</em> it exists and what breaks if
-      the invariant is violated.
+      Jedna z kluczowych zasad projektu: logika i decyzje są wyjaśnione bezpośrednio w kodzie —
+      nie tylko <em>co</em> robi dana funkcja, ale też <em>dlaczego</em> jest potrzebna i co się zepsuje,
+      jeśli naruszy się dany niezmiennik.
     </p>
 
-    <h3>1. Clear separation of structure and business logic</h3>
+    <h3>1. Wyraźny podział struktury i logiki biznesowej</h3>
     <div class="screenshot">
-      <img src="img/code-schema-sql.png" alt="Comments in schema.sql" onclick="openLightbox(this)">
+      <img src="../img/code-schema-sql.png" alt="Komentarze w schema.sql" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>schema.sql</strong> — an explicit rule: this file holds structure only. Business
-        logic lives in the modular files.
+        <strong>schema.sql</strong> — jasna zasada: tu znajduje się wyłącznie struktura.
+        Logika biznesowa mieszka w plikach modułowych.
       </div>
     </div>
 
-    <h3>2. Room assignment with explicit business rules</h3>
+    <h3>2. Dobór sal z jawnie zapisanymi regułami biznesowymi</h3>
     <div class="screenshot">
-      <img src="img/code-find-room.png" alt="The _find_room function" onclick="openLightbox(this)">
+      <img src="../img/code-find-room.png" alt="Funkcja _find_room" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>campus._find_room()</strong> — room-priority rules for physics and chemistry are
-        documented and encoded directly in the query.
+        <strong>campus._find_room()</strong> — reguły priorytetów sal dla fizyki i chemii
+        są udokumentowane i zakodowane wprost w zapytaniu.
       </div>
     </div>
 
     <div class="screenshot">
-      <img src="img/code-year-schedule.png" alt="year_schedule.sql header" onclick="openLightbox(this)">
+      <img src="../img/code-year-schedule.png" alt="Nagłówek year_schedule.sql" onclick="openLightbox(this)">
       <div class="screenshot-caption">
-        <strong>year_schedule.sql</strong> — the file header explains the purpose of every key
-        function and the freeze / unfreeze day flow.
+        <strong>year_schedule.sql</strong> — w nagłówku pliku wyjaśniono przeznaczenie każdej
+        kluczowej funkcji oraz przepływ freeze / unfreeze dnia.
       </div>
     </div>
 
-    <h2>Results</h2>
+    <h2>Rezultaty</h2>
     <ul>
-      <li>The system has been running successfully in production since August 2026</li>
-      <li>Handles the center's real daily operational load</li>
-      <li>Critical invariants (schedule conflicts, access rights, audit) are enforced at the
-        database level</li>
-      <li>A complete, immutable history of every significant action</li>
-      <li>About 50 staff members use the system every day</li>
+      <li>System działa produkcyjnie i stabilnie od sierpnia 2026</li>
+      <li>Wytrzymuje rzeczywiste, codzienne obciążenie operacyjne centrum</li>
+      <li>Krytyczne niezmienniki (konflikty harmonogramu, uprawnienia dostępu, audyt) są zagwarantowane na poziomie bazy danych</li>
+      <li>Pełna, niezmienna historia wszystkich istotnych działań</li>
+      <li>Z systemu codziennie korzysta ok. 50 pracowników</li>
     </ul>
 
     <footer>
-      This case study was prepared for a portfolio. Staff personal data (names, phone numbers,
-      emails) in the screenshots have been hidden or changed.
+      Case study przygotowane do portfolio. Dane osobowe pracowników (imiona, numery telefonów,
+      adresy e-mail) na zrzutach ekranu zostały ukryte lub zmienione.
     </footer>
 
   </div>
@@ -546,7 +544,7 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
     <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
-    <img id="lightbox-img" src="" alt="Enlarged screenshot">
+    <img id="lightbox-img" src="" alt="Powiększony zrzut ekranu">
   </div>
 
   <script>
