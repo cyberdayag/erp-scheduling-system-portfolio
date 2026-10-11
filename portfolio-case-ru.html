@@ -32,7 +32,7 @@
     .container {
       max-width: 960px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 100px 24px 80px;
     }
 
     header {
@@ -237,6 +237,11 @@
     .lang-switch-menu a { display: block; padding: 9px 12px; text-align: left; font-size: 0.9rem; color: #1e293b; text-decoration: none; background: none; }
     .lang-switch-menu a:hover { color: #2e75b6; }
     .lang-switch-menu a.active { color: #2e75b6; font-weight: 700; cursor: default; pointer-events: none; }
+    .page-nav { position: fixed; top: 16px; left: 20px; z-index: 40; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    .page-nav a { font-size: 0.85rem; font-weight: 600; color: #64748b; text-decoration: none; transition: color .15s; }
+    .page-nav a:hover { color: #2e75b6; }
+    .page-nav .disabled-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; }
+    .page-nav .soon-badge { display: inline-block; padding: 1px 7px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; background: #cbd5e1; border-radius: 999px; }
   </style>
 </head>
 
@@ -254,6 +259,12 @@
       <a href="portfolio-case-pl.html">Polski</a>
       <a href="portfolio-case-ru.html" class="active">Русский</a>
     </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="index.html">← Back</a>
+    <a href="overview/scheduling_system_overview.html">Technical overview</a>
+    <div class="disabled-item">Live demo<span class="soon-badge">Soon</span></div>
   </div>
 
   <div class="container">
